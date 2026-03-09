@@ -32,7 +32,7 @@ export const createTask = async (
 
     await docClient.send(
       new PutCommand({
-        TableName: process.env.DYNAMO_TODO_TABLE,
+        TableName: process.env.DYNAMODB_TODO_TABLE,
         Item: {
           todoId: todoItem.id,
           status: todoItem.status,
