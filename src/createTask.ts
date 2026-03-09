@@ -34,7 +34,7 @@ export const createTask = async (
       new PutCommand({
         TableName: process.env.DYNAMO_TODO_TABLE,
         Item: {
-          primary_key: todoItem.id,
+          todoId: todoItem.id,
           status: todoItem.status,
           title: todoItem.title,
           description: todoItem.description,
