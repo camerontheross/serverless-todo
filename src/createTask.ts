@@ -18,10 +18,10 @@ export const createTask = async (
 
     const todoItem: TodoItem = JSON.parse(rawBody);
 
-    if (!todoItem.id || !todoItem.title) {
+    if (!todoItem.id || !todoItem.title || !todoItem.status) {
       return {
         statusCode: 400,
-        body: JSON.stringify("Missing required fields ID or TITLE"),
+        body: JSON.stringify("Missing required fields ID, STATUS, or TITLE"),
       };
     }
 
