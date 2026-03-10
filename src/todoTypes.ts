@@ -1,12 +1,23 @@
-export type TodoStatus = "PENDING" | "DOING" | "DONE";
+export const TodoStatus = {
+  PENDING: 'PENDING',
+  DOING: 'DOING',
+  DONE: 'DONE',
+} as const;
 
-export type TodoItem = {
-  id: number;
-  status: TodoStatus;
-  title: string;
-  description?: string;
-};
+import { z } from 'zod';
 
-export function isValidTodoStatus(value: any): value is TodoStatus {
-  return ["PENDING", "DOING", "DONE"].includes(value);
-}
+export const TodoItemSchema = z.object({
+  id: z.int().positive(),
+  status: z.enum(TodoStatus),
+  title: z.string(),
+  description: z.string().optional(),
+});
+
+export type TodoItem = z.infer<typeof TodoItemSchema>;
+
+export const TodoItemCreateSchema = TodoItemSchema.omit({
+  // let the server generate the id
+  id: true,
+});
+
+export type TodoItemCreate = z.infer<typeof TodoItemCreateSchema>;

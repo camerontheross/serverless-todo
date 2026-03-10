@@ -1,51 +1,40 @@
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import type { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
-import type { TodoItem } from "./todoTypes.ts";
-import { docClient } from "./dynamoClient.ts";
+import type { APIGatewayProxyResult } from 'aws-lambda';
+import { type TodoItemCreate, TodoItemCreateSchema } from './todoTypes.ts';
+import { createTodo } from './dynamoClient.ts';
 
-export const createTask = async (
-  event: APIGatewayEvent,
-): Promise<APIGatewayProxyResult> => {
-  try {
-    // validate that an event body has been given to us
-    if (!event.body) {
-      return { statusCode: 400, body: JSON.stringify("Missing request body") };
-    }
+import { Logger } from '@aws-lambda-powertools/logger';
 
-    const rawBody: string = event.isBase64Encoded
-      ? Buffer.from(event.body, "base64").toString()
-      : event.body;
+import { ApiGatewayV2Envelope } from '@aws-lambda-powertools/parser/envelopes/api-gatewayv2';
+import { parser } from '@aws-lambda-powertools/parser/middleware';
+import middy from '@middy/core';
 
-    const todoItem: TodoItem = JSON.parse(rawBody);
+const logger = new Logger();
 
-    if (!todoItem.id || !todoItem.title || !todoItem.status) {
+export const createTask = middy()
+  // validate that an event body has been given to us
+  .use(parser({ schema: TodoItemCreateSchema, envelope: ApiGatewayV2Envelope }))
+  .handler(async (todoItem: TodoItemCreate): Promise<APIGatewayProxyResult> => {
+    try {
+      await createTodo({
+        status: todoItem.status,
+        title: todoItem.title,
+        description: todoItem.description,
+      });
+
       return {
-        statusCode: 400,
-        body: JSON.stringify("Missing required fields ID, STATUS, or TITLE"),
+        statusCode: 201,
+        body: JSON.stringify(`${todoItem.title} has been successfully added.`),
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        logger.error('Error saving task', error);
+      } else {
+        logger.error('Unknown error saving task', { error });
+      }
+
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: `Internal Server Error` }),
       };
     }
-
-    await docClient.send(
-      new PutCommand({
-        TableName: process.env.DYNAMODB_TODO_TABLE,
-        Item: {
-          todoId: todoItem.id,
-          status: todoItem.status,
-          title: todoItem.title,
-          description: todoItem.description,
-        },
-      }),
-    );
-
-    return {
-      statusCode: 201,
-      body: JSON.stringify(`${todoItem.title} has been successfully added.`),
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: `Internal Server Error: ${error}` }),
-    };
-  }
-};
+  });
