@@ -1,6 +1,5 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import type { APIGatewayProxyResult } from "aws-lambda";
-
 import { docClient } from "./dynamoClient.ts";
 
 export const getAllTasks = async (): Promise<APIGatewayProxyResult> => {
