@@ -18,6 +18,7 @@ provider:
             - "dynamodb:PutItem"
             - "dynamodb:Get*"
             - "dynamodb:Scan*"
+            - "dynamodb:Query*"
             - "dynamodb:UpdateItem"
             - "dynamodb:DeleteItem"
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-todoList-${sls:stage}
@@ -34,6 +35,13 @@ functions:
     events:
       - httpApi:
           path: /
+          method: get
+
+  getTasksByStatus:
+    handler: dist/getTasksByStatus.getTasksByStatus
+    events:
+      - httpApi:
+          path: /status/{status}
           method: get
 
 resources:
