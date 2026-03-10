@@ -1,42 +1,28 @@
-import type { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
-import { isValidTodoStatus, type TodoStatus } from "./todoTypes.ts";
-import { QueryCommand, type QueryCommandInput } from "@aws-sdk/client-dynamodb";
-import { docClient } from "./dynamoClient.ts";
+import type { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { isValidTodoStatus } from './types/utils/is-valid-todo-status.ts';
+import { getTodosByStatus } from './repositories/todo-read-repository.ts';
+import type { TodoStatus } from './types/todo-status-type.ts';
 
 export const getTasksByStatus = async (
   event: APIGatewayEvent,
 ): Promise<APIGatewayProxyResult> => {
   if (event.pathParameters === null || event.pathParameters === undefined) {
-    return { statusCode: 400, body: JSON.stringify("Bad Request") };
+    return { statusCode: 400, body: JSON.stringify('Bad Request') };
   }
 
   if (!isValidTodoStatus(event.pathParameters.status)) {
-    return { statusCode: 400, body: JSON.stringify("Bad Request") };
+    return { statusCode: 400, body: JSON.stringify('Bad Request') };
   }
 
   try {
     const requestedStatus: TodoStatus = event.pathParameters.status;
-    const queryInput: QueryCommandInput = {
-      TableName: process.env.DYNAMODB_TODO_TABLE,
-
-      ExpressionAttributeNames: {
-        "#st": "status",
-      },
-      ExpressionAttributeValues: {
-        ":s": { S: requestedStatus.toString() },
-      },
-
-      KeyConditionExpression: "#st = :s",
-    };
-
-    const queryCommand = new QueryCommand(queryInput);
-    const result = await docClient.send(queryCommand);
+    const result = await getTodosByStatus(requestedStatus);
 
     if (!result.Count || result.Count === 0) {
-      return { statusCode: 404, body: JSON.stringify("Resource not found") };
+      return { statusCode: 404, body: JSON.stringify('Resource not found') };
     }
     if (!result.Items || result.Items === undefined) {
-      return { statusCode: 404, body: JSON.stringify("Resource not found") };
+      return { statusCode: 404, body: JSON.stringify('Resource not found') };
     }
 
     return {

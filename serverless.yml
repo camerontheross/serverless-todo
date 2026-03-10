@@ -1,7 +1,7 @@
 org: camerontheross
 app: serverless-todo
 service: serverless-todo
-frameworkVersion: "3"
+frameworkVersion: "4"
 
 provider:
   name: aws
@@ -23,22 +23,25 @@ provider:
             - "dynamodb:DeleteItem"
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-todoList-${sls:stage}
 
+package:
+  individually: true
+
 functions:
   createTask:
-    handler: dist/createTask.createTask
+    handler: src/createTask.createTask
     events:
       - httpApi:
           path: /createTask
           method: post
   getAllTasks:
-    handler: dist/getAllTasks.getAllTasks
+    handler: src/getAllTasks.getAllTasks
     events:
       - httpApi:
           path: /
           method: get
 
   getTasksByStatus:
-    handler: dist/getTasksByStatus.getTasksByStatus
+    handler: src/getTasksByStatus.getTasksByStatus
     events:
       - httpApi:
           path: /status/{status}
