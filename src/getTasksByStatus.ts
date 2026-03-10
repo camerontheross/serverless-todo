@@ -1,6 +1,7 @@
 import type { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { isValidTodoStatus, type TodoStatus } from './todoTypes.ts';
-import { getTodosByStatus } from './todoReadRepository.ts';
+import { isValidTodoStatus } from './types/utils/is-valid-todo-status.ts';
+import { getTodosByStatus } from './repositories/todo-read-repository.ts';
+import type { TodoStatus } from './types/todo-status-type.ts';
 
 export const getTasksByStatus = async (
   event: APIGatewayEvent,

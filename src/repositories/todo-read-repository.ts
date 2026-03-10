@@ -1,6 +1,6 @@
 import { QueryCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
-import { docClient } from './dynamoDocClient.ts';
-import type { TodoStatus } from './todoTypes.ts';
+import { docClient } from '../dynamoDocClient.ts';
+import type { TodoStatus } from '../types/todo-status-type.ts';
 
 export const getAllTodos = async () =>
   docClient.send(

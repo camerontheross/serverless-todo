@@ -1,5 +1,5 @@
 import type { APIGatewayProxyResult } from 'aws-lambda';
-import { getAllTodos } from './todoReadRepository.ts';
+import { getAllTodos } from './repositories/todo-read-repository.ts';
 
 export const getAllTasks = async (): Promise<APIGatewayProxyResult> => {
   try {

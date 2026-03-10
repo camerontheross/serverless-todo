@@ -1,12 +1,13 @@
 import type { APIGatewayProxyResult } from 'aws-lambda';
-import { type TodoItemCreate, TodoItemCreateSchema } from './todoTypes.ts';
-import { createTodo } from './todoWriteRepository.ts';
 
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import { ApiGatewayV2Envelope } from '@aws-lambda-powertools/parser/envelopes/api-gatewayv2';
 import { parser } from '@aws-lambda-powertools/parser/middleware';
 import middy from '@middy/core';
+import { TodoItemCreateSchema } from './schemas/todo-item-create-schema.ts';
+import type { TodoItemCreate } from './types/todo-item-create-type.ts';
+import { createTodo } from './repositories/todo-write-repository.ts';
 
 const logger = new Logger();
 
