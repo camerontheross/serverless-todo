@@ -23,6 +23,14 @@ provider:
             - "dynamodb:DeleteItem"
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-todoList-${sls:stage}
 
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: serverless-todo-static-website
+    distributionFolder: frontend/dist
+
 package:
   individually: true
 
