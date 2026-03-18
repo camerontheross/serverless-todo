@@ -1,17 +1,17 @@
-import type { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { isValidTodoStatus } from './types/utils/is-valid-todo-status.ts';
-import { getTodosByStatus } from './repositories/todo-read-repository.ts';
-import type { TodoStatus } from './types/todo-status-type.ts';
+import type { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
+import { isValidTodoStatus } from "./types/utils/is-valid-todo-status.ts";
+import { getTodosByStatus } from "./repositories/todo-read-repository.ts";
+import type { TodoStatus } from "./types/todo-status-type.ts";
 
 export const getTasksByStatus = async (
   event: APIGatewayEvent,
 ): Promise<APIGatewayProxyResult> => {
   if (event.pathParameters === null || event.pathParameters === undefined) {
-    return { statusCode: 400, body: JSON.stringify('Bad Request') };
+    return { statusCode: 400, body: JSON.stringify("Bad Request") };
   }
 
   if (!isValidTodoStatus(event.pathParameters.status)) {
-    return { statusCode: 400, body: JSON.stringify('Bad Request') };
+    return { statusCode: 400, body: JSON.stringify("Bad Request") };
   }
 
   try {
@@ -19,10 +19,10 @@ export const getTasksByStatus = async (
     const result = await getTodosByStatus(requestedStatus);
 
     if (!result.Count || result.Count === 0) {
-      return { statusCode: 404, body: JSON.stringify('Resource not found') };
+      return { statusCode: 404, body: JSON.stringify("Resource not found") };
     }
     if (!result.Items || result.Items === undefined) {
-      return { statusCode: 404, body: JSON.stringify('Resource not found') };
+      return { statusCode: 404, body: JSON.stringify("Resource not found") };
     }
 
     return {
@@ -32,7 +32,7 @@ export const getTasksByStatus = async (
         items: result.Items.map((todoItem) => ({
           title: todoItem.title,
           status: todoItem.status,
-          desctiption: todoItem.description,
+          description: todoItem.description,
         })),
       }),
     };
