@@ -6,6 +6,8 @@ frameworkVersion: "4"
 provider:
   name: aws
   runtime: nodejs22.x
+  httpApi:
+    cors: true
 
   environment:
     DYNAMODB_TODO_TABLE: ${self:service}-todoList-${sls:stage}
@@ -23,25 +25,34 @@ provider:
             - "dynamodb:DeleteItem"
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-todoList-${sls:stage}
 
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: camerontheross-todo
+    distributionFolder: frontend/dist
+
 package:
   individually: true
 
 functions:
   createTask:
-    handler: src/createTask.createTask
+    handler: backend/src/createTask.createTask
     events:
       - httpApi:
           path: /createTask
           method: post
+
   getAllTasks:
-    handler: src/getAllTasks.getAllTasks
+    handler: backend/src/getAllTasks.getAllTasks
     events:
       - httpApi:
           path: /
           method: get
 
   getTasksByStatus:
-    handler: src/getTasksByStatus.getTasksByStatus
+    handler: backend/src/getTasksByStatus.getTasksByStatus
     events:
       - httpApi:
           path: /status/{status}

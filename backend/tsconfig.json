@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["ES2015"],
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "../dist",
+    "paths": ["node_modules/*", "src/*"]
   }
 
 }

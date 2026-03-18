@@ -1,13 +1,13 @@
-import type { APIGatewayProxyResult } from 'aws-lambda';
+import type { APIGatewayProxyResult } from "aws-lambda";
 
-import { Logger } from '@aws-lambda-powertools/logger';
+import { Logger } from "@aws-lambda-powertools/logger";
 
-import { ApiGatewayV2Envelope } from '@aws-lambda-powertools/parser/envelopes/api-gatewayv2';
-import { parser } from '@aws-lambda-powertools/parser/middleware';
-import middy from '@middy/core';
-import { TodoItemCreateSchema } from './schemas/todo-item-create-schema.ts';
-import type { TodoItemCreate } from './types/todo-item-create-type.ts';
-import { createTodo } from './repositories/todo-write-repository.ts';
+import { ApiGatewayV2Envelope } from "@aws-lambda-powertools/parser/envelopes/api-gatewayv2";
+import { parser } from "@aws-lambda-powertools/parser/middleware";
+import middy from "@middy/core";
+import { TodoItemCreateSchema } from "./schemas/todo-item-create-schema.ts";
+import type { TodoItemCreate } from "./types/todo-item-create-type.ts";
+import { createTodo } from "./repositories/todo-write-repository.ts";
 
 const logger = new Logger();
 
@@ -28,9 +28,9 @@ export const createTask = middy()
       };
     } catch (error) {
       if (error instanceof Error) {
-        logger.error('Error saving task', error);
+        logger.error("Error saving task", error);
       } else {
-        logger.error('Unknown error saving task', { error });
+        logger.error("Unknown error saving task", { error });
       }
 
       return {

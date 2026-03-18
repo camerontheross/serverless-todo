@@ -10,6 +10,8 @@ jspm_packages
 
 # Build artifacts (adjust 'dist' or 'build' to match your project's output directory)
 /dist
+frontend/dist
+backend/dist
 /build
 /coverage
 
