@@ -2,7 +2,7 @@ import { OverlayTrigger, Popover, Button, Card, Row, Col } from 'react-bootstrap
 import type { TodoItem } from "@shared/types"
 
 
-interface TaskCardProps {
+interface TodoItemCardProps {
   todoItem: TodoItem
 }
 
@@ -19,7 +19,7 @@ const descriptionPopover = (desc?: string) => (
 )
 
 
-export const TaskCard = (props: TaskCardProps) => {
+export const TodoItemCard = (props: TodoItemCardProps) => {
   return (
     <Card className="Task-Card">
       <Row>

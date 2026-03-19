@@ -2,7 +2,7 @@ import type { TodoItem, TodoStatus } from "@shared/types";
 
 const apiUrl: string = import.meta.env.VITE_TODO_API_URL;
 
-export const fetchTaskByStatus = async (
+export const fetchTodoItemsByStatus = async (
   status: TodoStatus,
 ): Promise<TodoItem[]> => {
   const response = await fetch(`${apiUrl}/status/${status}`);
@@ -11,7 +11,7 @@ export const fetchTaskByStatus = async (
     throw new Error(`Failed to fetch tasks: ${response.statusText}`);
   }
 
-  const taskList = await response.json();
+  const todoList = await response.json();
 
-  return taskList.items;
+  return todoList.items;
 };

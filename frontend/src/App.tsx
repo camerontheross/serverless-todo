@@ -1,5 +1,5 @@
 import './App.css'
-import { TaskList } from './components/TaskList.tsx'
+import { TodoList } from './components/TodoList.tsx'
 import { Container, Stack } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -15,9 +15,9 @@ export const App = () => {
       </header>
       <Container>
         <Stack direction='horizontal'>
-          <TaskList status="PENDING"></TaskList>
-          <TaskList status="DOING"></TaskList>
-          <TaskList status="DONE"></TaskList>
+          <TodoList status="PENDING"></TodoList>
+          <TodoList status="DOING"></TodoList>
+          <TodoList status="DONE"></TodoList>
         </Stack>
       </Container>
 

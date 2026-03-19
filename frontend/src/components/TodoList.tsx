@@ -1,30 +1,30 @@
 import { Card, Container, Stack } from "react-bootstrap"
-import { TaskCard } from "./TaskCard"
+import { TodoItemCard } from "./TodoItemCard"
 
-import { fetchTaskByStatus } from "../services/taskService"
+import { fetchTodoItemsByStatus } from "../services/todoService"
 import { useEffect, useState } from 'react'
 import type { TodoStatus, TodoItem } from "@shared/types"
 
 
-interface TaskListProps {
+interface TodoListProps {
   status: TodoStatus
 
 }
 
-const mapTaskItems = (tasks: TodoItem[]) => {
+const mapTodoItems = (tasks: TodoItem[]) => {
 
   if (tasks.length === 0) {
     return (<>No tasks to complete!</>)
   }
 
   return tasks.map((value: TodoItem) => {
-    return <TaskCard todoItem={value}></TaskCard>
+    return <TodoItemCard todoItem={value}></TodoItemCard>
   })
 }
 
-export const TaskList = ({ status }: TaskListProps) => {
+export const TodoList = ({ status }: TodoListProps) => {
 
-  const [tasks, setTasks] = useState<TodoItem[]>([])
+  const [todoItems, setTodoItems] = useState<TodoItem[]>([])
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,8 +34,8 @@ export const TaskList = ({ status }: TaskListProps) => {
     const loadData = async () => {
       try {
         setLoading(true)
-        const data = await fetchTaskByStatus(status)
-        setTasks(data)
+        const data = await fetchTodoItemsByStatus(status)
+        setTodoItems(data)
       }
       catch (err) {
         setError("Failed to load tasks.")
@@ -56,8 +56,7 @@ export const TaskList = ({ status }: TaskListProps) => {
           <Stack gap={3}>
             {loading && <p>loading...</p>}
             {error && <p>ERROR, {error}</p>}
-
-            {!loading && !error && mapTaskItems(tasks)}
+            {!loading && !error && mapTodoItems(todoItems)}
           </Stack>
         </Card.Body>
       </Card>
