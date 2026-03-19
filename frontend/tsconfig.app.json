@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
 
-    // hopefully fix issue with path aliases and vite...
+    // This specifically has to be in "tsconfig.app.json"
+    // for some reason Vite does not recognize it when its in tsconfig.json
+    // Aliases ALSO have to be defined in vite.config.ts
     "baseUrl": "../",
     "paths": {
       "@shared/*": ["./shared/*"]
