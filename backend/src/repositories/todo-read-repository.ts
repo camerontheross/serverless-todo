@@ -1,6 +1,6 @@
-import { QueryCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
-import { docClient } from '../dynamoDocClient.ts';
-import type { TodoStatus } from '../types/todo-status-type.ts';
+import { QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { docClient } from "../dynamoDocClient";
+import type { TodoStatus } from "@shared/types/";
 
 export const getAllTodos = async () =>
   docClient.send(
@@ -14,11 +14,11 @@ export const getTodosByStatus = async (status: TodoStatus) =>
     new QueryCommand({
       TableName: process.env.DYNAMODB_TODO_TABLE,
       ExpressionAttributeNames: {
-        '#st': 'status',
+        "#st": "status",
       },
       ExpressionAttributeValues: {
-        ':s': status,
+        ":s": status,
       },
-      KeyConditionExpression: '#st = :s',
+      KeyConditionExpression: "#st = :s",
     }),
   );

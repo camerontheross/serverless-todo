@@ -1,7 +1,7 @@
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { v4 } from 'uuid';
-import { docClient } from '../dynamoDocClient.ts';
-import type { TodoItemCreate } from '../types/todo-item-create-type.ts';
+import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { v4 } from "uuid";
+import { docClient } from "../dynamoDocClient.ts";
+import type { TodoItemCreate } from "@shared/types";
 
 export const createTodo = async (todoItemCreate: TodoItemCreate) => {
   const { status, title, description } = todoItemCreate;
